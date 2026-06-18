@@ -16,7 +16,7 @@
     <div class="detail-header">
       <div>
         <span class="money figure detail-amount">
-          ₹{{ bill.bill_amount | number:'1.2-2' }}
+          ₹{{ (+bill.bill_amount).toFixed(2) }}
         </span>
 
         <p class="detail-date">
@@ -79,7 +79,7 @@
             <td
               data-label="Amount"
               class="money figure">
-              ₹{{ p.amount | number:'1.2-2' }}
+              ₹{{ (+p.amount).toFixed(2) }}
             </td>
 
           </tr>

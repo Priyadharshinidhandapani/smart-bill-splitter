@@ -33,7 +33,7 @@
     <div class="card bill-card" *ngFor="let bill of bills">
       <a [routerLink]="['/history', bill.id]" class="bill-card-main">
         <div class="bill-card-top">
-          <span class="money figure bill-amount">₹{{ bill.bill_amount.toFixed(2) }}</span>
+          <span class="money figure bill-amount">₹{{ (+bill.bill_amount).toFixed(2) }}</span>
           <span class="badge" [ngClass]="'badge-' + bill.split_method">{{ bill.split_method }}</span>
         </div>
         <p class="bill-participants">{{ participantNames(bill) }}</p>
