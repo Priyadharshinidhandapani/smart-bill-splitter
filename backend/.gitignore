@@ -1,0 +1,8 @@
+node_modules/
+npm-debug.log
+
+# SQLite database file (auto-generated on first run)
+db/billsplitter.db
+
+.env
+.DS_Store

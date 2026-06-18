@@ -1,0 +1,370 @@
+<div class="page-container">
+  <h1 class="page-title">Split a Bill</h1>
+  <p class="page-subtitle">Enter the total, pick a method, and we'll do the math.</p>
+
+  <!-- Bill amount -->
+  <div class="card amount-card">
+    <label for="billAmount" class="amount-label">Total Bill Amount</label>
+    <div class="amount-input-wrap">
+      <span class="currency-symbol">₹</span>
+      <input
+        id="billAmount"
+        type="number"
+        class="amount-input"
+        placeholder="0.00"
+        min="0"
+        step="0.01"
+        [(ngModel)]="billAmount"
+        name="billAmount"
+      />
+    </div>
+  </div>
+
+  <!-- Split method tabs -->
+  <div class="method-tabs">
+    <button
+      class="method-tab"
+      [class.active]="splitMethod === 'contacts'"
+      (click)="setSplitMethod('contacts')"
+    >
+      Contacts
+    </button>
+    <button
+      class="method-tab"
+      [class.active]="splitMethod === 'shares'"
+      (click)="setSplitMethod('shares')"
+    >
+      Shares
+    </button>
+    <button
+      class="method-tab"
+      [class.active]="splitMethod === 'percentage'"
+      (click)="setSplitMethod('percentage')"
+    >
+      Percentage
+    </button>
+  </div>
+
+  <!-- ===================== CONTACTS SPLIT ===================== -->
+  <div class="card" *ngIf="splitMethod === 'contacts'">
+    <div class="section-header">
+      <h3>Split With</h3>
+      <button class="btn btn-secondary btn-sm" (click)="toggleAddFriendsPanel()">
+        {{ showAddFriendsPanel ? '— Close' : '+ Add Friends' }}
+      </button>
+    </div>
+
+    <div class="empty-state-inline" *ngIf="selectedContacts.length === 0">
+      No one selected yet. Tap "Add Friends" to choose contacts.
+    </div>
+
+    <div class="chip-list" *ngIf="selectedContacts.length > 0">
+      <span class="chip" *ngFor="let c of selectedContacts">
+        {{ c.name }}
+        <button class="chip-remove" (click)="removeSelectedContact(c.id)" aria-label="Remove">×</button>
+      </span>
+    </div>
+
+    <div class="add-friends-panel" *ngIf="showAddFriendsPanel">
+      <div class="field">
+        <label>Search Contacts</label>
+        <input type="text" placeholder="Search by name or phone" [(ngModel)]="contactSearchTerm" name="contactSearch" />
+      </div>
+
+      <div class="loading-row" *ngIf="isLoadingContacts">
+        <span class="spinner spinner-dark"></span> Loading contacts…
+      </div>
+
+      <p class="empty-state-inline" *ngIf="!isLoadingContacts && filteredContacts.length === 0">
+        No contacts found.
+      </p>
+
+      <div class="contact-pick-list" *ngIf="!isLoadingContacts && filteredContacts.length > 0">
+        <label class="contact-pick-row" *ngFor="let c of filteredContacts">
+          <input
+            type="checkbox"
+            [checked]="isContactSelected(c.id)"
+            (change)="toggleContactSelection(c.id)"
+          />
+          <span class="contact-pick-name">{{ c.name }}</span>
+          <span class="contact-pick-phone">{{ c.phone }}</span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+
+      <p class="subsection-label">Or Create a New Contact</p>
+      <div class="new-contact-row">
+        <input type="text" placeholder="Full name" [(ngModel)]="newContactName" name="newContactName" />
+        <input type="tel" placeholder="Phone number" [(ngModel)]="newContactPhone" name="newContactPhone" />
+        <button class="btn btn-primary btn-sm" (click)="createNewContact()" [disabled]="isAddingContact">
+          <span class="spinner" *ngIf="isAddingContact"></span>
+          <span *ngIf="!isAddingContact">Add</span>
+        </button>
+      </div>
+    </div>
+
+    <ng-container *ngIf="selectedContacts.length > 0 && billAmount">
+      <div class="divider"></div>
+      <div class="split-preview">
+        <div class="split-preview-row" *ngFor="let c of selectedContacts">
+          <span>{{ c.name }}</span>
+          <span class="money figure">₹{{ contactsSplitAmount.toFixed(2) }}</span>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- ===================== SHARES SPLIT ===================== -->
+<div class="card" *ngIf="splitMethod === 'shares'">
+  <div class="section-header">
+    <h3>Participants &amp; Shares</h3>
+
+    <div>
+      <button
+        class="btn btn-secondary btn-sm"
+        (click)="toggleParticipantContactsPanel()">
+        Use Contacts
+      </button>
+
+      <button
+        class="btn btn-secondary btn-sm"
+        (click)="addParticipantRow()">
+        + Add Person
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="add-friends-panel"
+    *ngIf="showParticipantContactsPanel">
+
+    <div class="field">
+      <label>Search Contacts</label>
+
+      <input
+        type="text"
+        placeholder="Search by name or phone"
+        [(ngModel)]="participantSearchTerm"
+        name="participantSearchShares" />
+    </div>
+
+    <div class="contact-pick-list">
+
+      <label
+        class="contact-pick-row"
+        *ngFor="let c of filteredParticipantContacts">
+
+        <input
+          type="checkbox"
+          [checked]="isParticipantSelected(c.id)"
+          (change)="toggleParticipantSelection(c)" />
+
+        <span class="contact-pick-name">
+          {{ c.name }}
+        </span>
+
+        <span class="contact-pick-phone">
+          {{ c.phone }}
+        </span>
+
+      </label>
+
+    </div>
+
+  </div>
+
+  <div class="empty-state-inline" *ngIf="participantRows.length === 0">
+    No participants yet. Use "Use Contacts" to pick people, or "+ Add Person" to add one manually.
+  </div>
+
+  <div class="participant-rows" *ngIf="participantRows.length > 0">
+    <div class="participant-row" *ngFor="let row of participantRows; trackBy: trackByTempId">
+      <div class="participant-row-fields">
+        <input
+          type="text"
+          placeholder="Name"
+          [ngModel]="row.name"
+          (ngModelChange)="updateRowName(row.tempId, $event)"
+          name="name-{{ row.tempId }}"
+        />
+
+        <input
+          type="number"
+          placeholder="Shares"
+          min="0"
+          step="any"
+          [ngModel]="row.value"
+          (ngModelChange)="updateRowValue(row.tempId, $event)"
+          name="value-{{ row.tempId }}"
+          class="value-input"
+          [class.input-invalid]="isShareInvalid(row)"
+        />
+
+        <span class="row-amount money figure">
+          ₹{{ amountForRow(row).toFixed(2) }}
+        </span>
+
+        <button
+          class="btn-icon-remove"
+          (click)="removeParticipantRow(row.tempId)"
+          aria-label="Remove">
+          ×
+        </button>
+      </div>
+
+      <p class="field-error" *ngIf="isShareInvalid(row)">Please enter a valid share.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="totals-row">
+    <span>Total Shares</span>
+    <span class="figure">{{ totalShares }}</span>
+  </div>
+</div>
+  <!-- ===================== PERCENTAGE SPLIT ===================== -->
+<div class="card" *ngIf="splitMethod === 'percentage'">
+  <div class="section-header">
+    <h3>Participants &amp; Percentage</h3>
+
+    <div>
+      <button
+        class="btn btn-secondary btn-sm"
+        (click)="toggleParticipantContactsPanel()">
+        Use Contacts
+      </button>
+
+      <button
+        class="btn btn-secondary btn-sm"
+        (click)="addParticipantRow()">
+        + Add Person
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="add-friends-panel"
+    *ngIf="showParticipantContactsPanel">
+
+    <div class="field">
+      <label>Search Contacts</label>
+
+      <input
+        type="text"
+        placeholder="Search by name or phone"
+        [(ngModel)]="participantSearchTerm"
+        name="participantSearchPercentage" />
+    </div>
+
+    <div class="contact-pick-list">
+
+      <label
+        class="contact-pick-row"
+        *ngFor="let c of filteredParticipantContacts">
+
+        <input
+          type="checkbox"
+          [checked]="isParticipantSelected(c.id)"
+          (change)="toggleParticipantSelection(c)" />
+
+        <span class="contact-pick-name">
+          {{ c.name }}
+        </span>
+
+        <span class="contact-pick-phone">
+          {{ c.phone }}
+        </span>
+
+      </label>
+
+    </div>
+
+  </div>
+
+  <div class="empty-state-inline" *ngIf="participantRows.length === 0">
+    No participants yet. Use "Use Contacts" to pick people, or "+ Add Person" to add one manually.
+  </div>
+
+  <div class="participant-rows" *ngIf="participantRows.length > 0">
+    <div class="participant-row" *ngFor="let row of participantRows; trackBy: trackByTempId">
+      <div class="participant-row-fields">
+        <input
+          type="text"
+          placeholder="Name"
+          [ngModel]="row.name"
+          (ngModelChange)="updateRowName(row.tempId, $event)"
+          name="pname-{{ row.tempId }}"
+        />
+
+        <input
+          type="number"
+          placeholder="%"
+          min="0"
+          max="100"
+          [ngModel]="row.value"
+          (ngModelChange)="updateRowValue(row.tempId, $event)"
+          name="pvalue-{{ row.tempId }}"
+          class="value-input"
+        />
+
+        <span class="row-amount money figure">
+          ₹{{ amountForRow(row).toFixed(2) }}
+        </span>
+
+        <button
+          class="btn-icon-remove"
+          (click)="removeParticipantRow(row.tempId)"
+          aria-label="Remove">
+          ×
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div
+    class="totals-row"
+    [class.totals-error]="percentageRemaining !== 0">
+
+    <span>Total Percentage</span>
+
+    <span class="figure">
+      {{ totalPercentage.toFixed(2) }}%
+    </span>
+  </div>
+
+  <p
+    class="field-error"
+    *ngIf="percentageRemaining !== 0">
+
+    {{ percentageRemaining > 0
+      ? (percentageRemaining.toFixed(2) + '% remaining')
+      : ((-percentageRemaining).toFixed(2) + '% over 100%') }}
+  </p>
+</div>
+  <!-- Validation + Save -->
+  <p class="validation-message" *ngIf="validationError">{{ validationError }}</p>
+
+  <div class="action-row">
+    <button class="btn btn-ghost" (click)="resetForm()">Reset</button>
+    <button class="btn btn-primary btn-block" (click)="saveBill()" [disabled]="isSaving || (!!validationError && !isPercentageMismatch)">
+      <span class="spinner" *ngIf="isSaving"></span>
+      <span *ngIf="isSaving">Saving…</span>
+      <span *ngIf="!isSaving">Save Bill</span>
+    </button>
+  </div>
+</div>
+
+<!-- Popup validation: shown when the Percentage split does not total 100% -->
+<div class="modal-overlay" *ngIf="showValidationModal" (click)="closeValidationModal()">
+  <div class="modal-card" role="alertdialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <h3 class="modal-title">Total Percentage Must Equal 100%</h3>
+    <p class="modal-message">{{ validationModalMessage }}</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" (click)="closeValidationModal()">OK</button>
+    </div>
+  </div>
+</div>

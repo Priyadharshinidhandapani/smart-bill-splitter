@@ -1,0 +1,52 @@
+<div class="page-container">
+  <div class="header-row">
+    <div>
+      <h1 class="page-title">Bill History</h1>
+      <p class="page-subtitle">Every split you've saved, all in one place.</p>
+    </div>
+  </div>
+
+  <div class="controls-row">
+    <input
+      type="text"
+      placeholder="Search by participant, method, or amount"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange()"
+      class="search-input"
+    />
+    <button class="btn btn-ghost btn-sm" (click)="toggleSort()">
+      Date {{ sortOrder === 'desc' ? '↓' : '↑' }}
+    </button>
+  </div>
+
+  <div class="loading-row" *ngIf="isLoading">
+    <span class="spinner spinner-dark"></span> Loading bills…
+  </div>
+
+  <div class="empty-state" *ngIf="!isLoading && bills.length === 0">
+    <h3>No Bills Yet</h3>
+    <p>Save your first split and it'll show up here.</p>
+    <a routerLink="/" class="btn btn-primary" style="margin-top: 16px; display: inline-flex;">Split a Bill</a>
+  </div>
+
+  <div class="bill-list" *ngIf="!isLoading && bills.length > 0">
+    <div class="card bill-card" *ngFor="let bill of bills">
+      <a [routerLink]="['/history', bill.id]" class="bill-card-main">
+        <div class="bill-card-top">
+          <span class="money figure bill-amount">₹{{ bill.bill_amount.toFixed(2) }}</span>
+          <span class="badge" [ngClass]="'badge-' + bill.split_method">{{ bill.split_method }}</span>
+        </div>
+        <p class="bill-participants">{{ participantNames(bill) }}</p>
+        <p class="bill-date">{{ formatDate(bill.created_at) }}</p>
+      </a>
+
+      <div class="confirm-delete-row" *ngIf="confirmDeleteId === bill.id">
+        <span>Delete this bill?</span>
+        <button class="btn btn-ghost btn-sm" (click)="cancelDelete()">Cancel</button>
+        <button class="btn btn-danger btn-sm" (click)="confirmDelete(bill.id)">Delete</button>
+      </div>
+
+      <button class="delete-trigger" *ngIf="confirmDeleteId !== bill.id" (click)="requestDelete(bill.id)" aria-label="Delete bill">🗑</button>
+    </div>
+  </div>
+</div>

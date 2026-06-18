@@ -1,0 +1,98 @@
+<div class="page-container">
+  <div class="header-row">
+    <div>
+      <h1 class="page-title">Contacts</h1>
+      <p class="page-subtitle">People you split bills with regularly.</p>
+    </div>
+    <button class="btn btn-primary btn-sm" (click)="openAddForm()">+ Add Contact</button>
+  </div>
+
+  <!-- Add / Edit Form -->
+  <div class="card form-card" *ngIf="showForm">
+    <h3 class="form-title">{{ editingId ? 'Edit Contact' : 'New Contact' }}</h3>
+    <div class="field">
+      <label>Name</label>
+      <input
+        type="text"
+        [(ngModel)]="formName"
+        (ngModelChange)="onNameInput()"
+        placeholder="Full name"
+        name="formName"
+        [class.input-invalid]="nameError"
+      />
+      <p class="field-error" *ngIf="nameError">{{ nameError }}</p>
+    </div>
+    <div class="field">
+      <label>Phone Number</label>
+      <input
+        type="tel"
+        [(ngModel)]="formPhone"
+        (ngModelChange)="onPhoneInput()"
+        placeholder="Phone number"
+        name="formPhone"
+        [class.input-invalid]="phoneError"
+      />
+      <p class="field-error" *ngIf="phoneError">{{ phoneError }}</p>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" (click)="cancelForm()">Cancel</button>
+      <button class="btn btn-primary" (click)="submitForm()" [disabled]="isSaving">
+        <span class="spinner" *ngIf="isSaving"></span>
+        <span *ngIf="isSaving">Saving…</span>
+        <span *ngIf="!isSaving">Save Contact</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="controls-row">
+    <input
+      type="text"
+      placeholder="Search by name or phone"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange()"
+      class="search-input"
+      name="searchTerm"
+    />
+  </div>
+
+  <div class="loading-row" *ngIf="isLoading">
+    <span class="spinner spinner-dark"></span> Loading contacts…
+  </div>
+
+  <div class="empty-state" *ngIf="!isLoading && contacts.length === 0">
+    <h3>No Contacts Yet</h3>
+    <p>Add a contact to reuse them across future bill splits.</p>
+  </div>
+
+  <div class="card" *ngIf="!isLoading && contacts.length > 0">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Added</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of contacts">
+            <td data-label="Name">{{ c.name }}</td>
+            <td data-label="Phone">{{ c.phone }}</td>
+            <td data-label="Added">{{ formatDate(c.created_at) }}</td>
+            <td data-label="Actions">
+              <div class="row-actions" *ngIf="confirmDeleteId === c.id">
+                <button class="btn btn-ghost btn-sm" (click)="cancelDelete()">Cancel</button>
+                <button class="btn btn-danger btn-sm" (click)="confirmDelete(c.id)">Confirm</button>
+              </div>
+              <div class="row-actions" *ngIf="confirmDeleteId !== c.id">
+                <button class="btn btn-ghost btn-sm" (click)="openEditForm(c)">Edit</button>
+                <button class="btn btn-danger btn-sm" (click)="requestDelete(c.id)">Delete</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

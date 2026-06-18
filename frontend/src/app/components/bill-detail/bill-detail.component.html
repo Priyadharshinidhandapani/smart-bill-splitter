@@ -1,0 +1,58 @@
+<div class="page-container">
+  <a routerLink="/history" class="back-link">← Back to History</a>
+
+  <div class="loading-row" *ngIf="isLoading">
+    <span class="spinner spinner-dark"></span> Loading bill…
+  </div>
+
+  <div class="empty-state" *ngIf="!isLoading && notFound">
+    <h3>Bill Not Found</h3>
+    <p>It may have been deleted.</p>
+  </div>
+
+  <div class="card detail-card" *ngIf="!isLoading && !notFound && bill">
+    <div class="detail-header">
+      <div>
+        <span class="money figure detail-amount">₹{{ bill.bill_amount.toFixed(2) }}</span>
+        <p class="detail-date">{{ formatDate(bill.created_at) }}</p>
+      </div>
+      <span class="badge" [ngClass]="'badge-' + bill.split_method">{{ bill.split_method }}</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3 class="participants-heading">Participants</h3>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th *ngIf="bill.split_method === 'shares'">Shares</th>
+            <th *ngIf="bill.split_method === 'percentage'">Percentage</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of bill.participants">
+            <td data-label="Name">{{ p.participant_name }}</td>
+            <td *ngIf="bill.split_method === 'shares'" data-label="Shares" class="figure">{{ p.shares }}</td>
+            <td *ngIf="bill.split_method === 'percentage'" data-label="Percentage" class="figure">{{ p.percentage }}%</td>
+            <td data-label="Amount" class="money figure">₹{{ p.amount?.toFixed(2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="confirm-row" *ngIf="showConfirmDelete">
+      <span>Delete this bill permanently?</span>
+      <button class="btn btn-ghost btn-sm" (click)="showConfirmDelete = false">Cancel</button>
+      <button class="btn btn-danger btn-sm" (click)="deleteBill()">Delete</button>
+    </div>
+
+    <button class="btn btn-danger" *ngIf="!showConfirmDelete" (click)="showConfirmDelete = true">
+      Delete Bill
+    </button>
+  </div>
+</div>

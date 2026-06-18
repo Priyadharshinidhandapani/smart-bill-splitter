@@ -1,0 +1,8 @@
+/* Contact management styles are handled by global styles.css */
+
+/* Highlights an input that has a validation error (paired with the
+   shared .field-error message rendered just beneath it). */
+.input-invalid {
+  border-color: var(--neon-pink) !important;
+  box-shadow: 0 0 8px rgba(255, 0, 127, 0.25);
+}

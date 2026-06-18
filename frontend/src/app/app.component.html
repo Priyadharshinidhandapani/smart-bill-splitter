@@ -1,0 +1,32 @@
+<div class="app-shell">
+  <header class="top-nav">
+    <div class="nav-inner">
+      <a routerLink="/" class="brand">
+        <span class="brand-mark">S</span>
+        <span class="brand-name">Smart Bill Splitter</span>
+      </a>
+      <nav class="nav-links">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">New Split</a>
+        <a routerLink="/history" routerLinkActive="active">History</a>
+        <a routerLink="/contacts" routerLinkActive="active">Contacts</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Global toast notifications -->
+  <div class="toast-wrap">
+    <div
+      *ngFor="let toast of toasts"
+      class="toast"
+      [class.toast-success]="toast.type === 'success'"
+      [class.toast-error]="toast.type === 'error'"
+    >
+      <span>{{ toast.type === 'success' ? '✓' : '!' }}</span>
+      <span>{{ toast.message }}</span>
+    </div>
+  </div>
+</div>
