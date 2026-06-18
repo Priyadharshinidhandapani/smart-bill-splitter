@@ -10,7 +10,7 @@ import { ToastService } from '../../services/toast.service';
   styleUrls: ['./bill-detail.component.css']
 })
 export class BillDetailComponent implements OnInit {
-  bill: Bill | null = null;
+  bill: any = null;
   isLoading = true;
   notFound = false;
   showConfirmDelete = false;
@@ -24,17 +24,32 @@ export class BillDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+
     if (!id) {
       this.notFound = true;
       this.isLoading = false;
       return;
     }
+
     this.billService.getById(id).subscribe({
-      next: (bill) => {
+      next: (bill: any) => {
+
+        bill.bill_amount = Number(bill.bill_amount);
+
+        if (bill.participants && Array.isArray(bill.participants)) {
+          bill.participants = bill.participants.map((p: any) => ({
+            ...p,
+            amount: Number(p.amount),
+            shares: p.shares ? Number(p.shares) : null,
+            percentage: p.percentage ? Number(p.percentage) : null
+          }));
+        }
+
         this.bill = bill;
         this.isLoading = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error(err);
         this.notFound = true;
         this.isLoading = false;
       }
@@ -42,7 +57,10 @@ export class BillDetailComponent implements OnInit {
   }
 
   deleteBill(): void {
-    if (!this.bill) { return; }
+    if (!this.bill) {
+      return;
+    }
+
     this.billService.delete(this.bill.id).subscribe({
       next: () => {
         this.toast.success('Bill deleted');
@@ -55,8 +73,12 @@ export class BillDetailComponent implements OnInit {
   }
 
   formatDate(dateStr: string): string {
-    const d = new Date(dateStr.replace(' ', 'T') + 'Z');
-    if (isNaN(d.getTime())) { return dateStr; }
+    const d = new Date(dateStr);
+
+    if (isNaN(d.getTime())) {
+      return dateStr;
+    }
+
     return d.toLocaleDateString(undefined, {
       day: 'numeric',
       month: 'long',

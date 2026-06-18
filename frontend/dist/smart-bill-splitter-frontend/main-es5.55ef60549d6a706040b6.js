@@ -1633,7 +1633,7 @@
       /* harmony default export */
 
 
-      __webpack_exports__["default"] = "<div class=\"page-container\">\n  <a routerLink=\"/history\" class=\"back-link\">← Back to History</a>\n\n  <div class=\"loading-row\" *ngIf=\"isLoading\">\n    <span class=\"spinner spinner-dark\"></span> Loading bill…\n  </div>\n\n  <div class=\"empty-state\" *ngIf=\"!isLoading && notFound\">\n    <h3>Bill Not Found</h3>\n    <p>It may have been deleted.</p>\n  </div>\n\n  <div class=\"card detail-card\" *ngIf=\"!isLoading && !notFound && bill\">\n    <div class=\"detail-header\">\n      <div>\n        <span class=\"money figure detail-amount\">₹{{ bill.bill_amount.toFixed(2) }}</span>\n        <p class=\"detail-date\">{{ formatDate(bill.created_at) }}</p>\n      </div>\n      <span class=\"badge\" [ngClass]=\"'badge-' + bill.split_method\">{{ bill.split_method }}</span>\n    </div>\n\n    <div class=\"divider\"></div>\n\n    <h3 class=\"participants-heading\">Participants</h3>\n    <div class=\"table-wrap\">\n      <table class=\"data-table\">\n        <thead>\n          <tr>\n            <th>Name</th>\n            <th *ngIf=\"bill.split_method === 'shares'\">Shares</th>\n            <th *ngIf=\"bill.split_method === 'percentage'\">Percentage</th>\n            <th>Amount</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let p of bill.participants\">\n            <td data-label=\"Name\">{{ p.participant_name }}</td>\n            <td *ngIf=\"bill.split_method === 'shares'\" data-label=\"Shares\" class=\"figure\">{{ p.shares }}</td>\n            <td *ngIf=\"bill.split_method === 'percentage'\" data-label=\"Percentage\" class=\"figure\">{{ p.percentage }}%</td>\n            <td data-label=\"Amount\" class=\"money figure\">₹{{ p.amount?.toFixed(2) }}</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n\n    <div class=\"divider\"></div>\n\n    <div class=\"confirm-row\" *ngIf=\"showConfirmDelete\">\n      <span>Delete this bill permanently?</span>\n      <button class=\"btn btn-ghost btn-sm\" (click)=\"showConfirmDelete = false\">Cancel</button>\n      <button class=\"btn btn-danger btn-sm\" (click)=\"deleteBill()\">Delete</button>\n    </div>\n\n    <button class=\"btn btn-danger\" *ngIf=\"!showConfirmDelete\" (click)=\"showConfirmDelete = true\">\n      Delete Bill\n    </button>\n  </div>\n</div>\n";
+      __webpack_exports__["default"] = "<div class=\"page-container\">\n  <a routerLink=\"/history\" class=\"back-link\">← Back to History</a>\n\n  <div class=\"loading-row\" *ngIf=\"isLoading\">\n    <span class=\"spinner spinner-dark\"></span>\n    Loading bill...\n  </div>\n\n  <div class=\"empty-state\" *ngIf=\"!isLoading && notFound\">\n    <h3>Bill Not Found</h3>\n    <p>It may have been deleted.</p>\n  </div>\n\n  <div class=\"card detail-card\" *ngIf=\"!isLoading && !notFound && bill\">\n\n    <div class=\"detail-header\">\n      <div>\n        <span class=\"money figure detail-amount\">\n          ₹{{ bill.bill_amount | number:'1.2-2' }}\n        </span>\n\n        <p class=\"detail-date\">\n          {{ formatDate(bill.created_at) }}\n        </p>\n      </div>\n\n      <span\n        class=\"badge\"\n        [ngClass]=\"'badge-' + bill.split_method\">\n        {{ bill.split_method }}\n      </span>\n    </div>\n\n    <div class=\"divider\"></div>\n\n    <h3 class=\"participants-heading\">Participants</h3>\n\n    <div class=\"table-wrap\">\n      <table class=\"data-table\">\n\n        <thead>\n          <tr>\n            <th>Name</th>\n\n            <th *ngIf=\"bill.split_method === 'shares'\">\n              Shares\n            </th>\n\n            <th *ngIf=\"bill.split_method === 'percentage'\">\n              Percentage\n            </th>\n\n            <th>Amount</th>\n          </tr>\n        </thead>\n\n        <tbody>\n\n          <tr *ngFor=\"let p of bill.participants\">\n\n            <td data-label=\"Name\">\n              {{ p.participant_name }}\n            </td>\n\n            <td\n              *ngIf=\"bill.split_method === 'shares'\"\n              data-label=\"Shares\"\n              class=\"figure\">\n              {{ p.shares }}\n            </td>\n\n            <td\n              *ngIf=\"bill.split_method === 'percentage'\"\n              data-label=\"Percentage\"\n              class=\"figure\">\n              {{ p.percentage }}%\n            </td>\n\n            <td\n              data-label=\"Amount\"\n              class=\"money figure\">\n              ₹{{ p.amount | number:'1.2-2' }}\n            </td>\n\n          </tr>\n\n        </tbody>\n\n      </table>\n    </div>\n\n    <div class=\"divider\"></div>\n\n    <div class=\"confirm-row\" *ngIf=\"showConfirmDelete\">\n      <span>Delete this bill permanently?</span>\n\n      <button\n        class=\"btn btn-ghost btn-sm\"\n        (click)=\"showConfirmDelete = false\">\n        Cancel\n      </button>\n\n      <button\n        class=\"btn btn-danger btn-sm\"\n        (click)=\"deleteBill()\">\n        Delete\n      </button>\n    </div>\n\n    <button\n      class=\"btn btn-danger\"\n      *ngIf=\"!showConfirmDelete\"\n      (click)=\"showConfirmDelete = true\">\n      Delete Bill\n    </button>\n\n  </div>\n</div>";
       /***/
     },
 
@@ -1728,10 +1728,23 @@
 
             this.billService.getById(id).subscribe({
               next: function next(bill) {
+                bill.bill_amount = Number(bill.bill_amount);
+
+                if (bill.participants && Array.isArray(bill.participants)) {
+                  bill.participants = bill.participants.map(function (p) {
+                    return Object.assign(Object.assign({}, p), {
+                      amount: Number(p.amount),
+                      shares: p.shares ? Number(p.shares) : null,
+                      percentage: p.percentage ? Number(p.percentage) : null
+                    });
+                  });
+                }
+
                 _this0.bill = bill;
                 _this0.isLoading = false;
               },
-              error: function error() {
+              error: function error(err) {
+                console.error(err);
                 _this0.notFound = true;
                 _this0.isLoading = false;
               }
@@ -1760,7 +1773,7 @@
         }, {
           key: "formatDate",
           value: function formatDate(dateStr) {
-            var d = new Date(dateStr.replace(' ', 'T') + 'Z');
+            var d = new Date(dateStr);
 
             if (isNaN(d.getTime())) {
               return dateStr;
@@ -2201,4 +2214,4 @@
     }
   }, [[0, "runtime", "vendor"]]]);
 })();
-//# sourceMappingURL=main-es5.4c47c64ba068343808a0.js.map
+//# sourceMappingURL=main-es5.55ef60549d6a706040b6.js.map
