@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://YOUR-BACKEND-URL.onrender.com'
+  apiBaseUrl: 'https://smart-bill-splitter-backend.onrender.com'
 };
