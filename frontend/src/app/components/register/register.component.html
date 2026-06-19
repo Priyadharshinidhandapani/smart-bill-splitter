@@ -1,0 +1,38 @@
+<div class="page-container">
+
+  <div class="card auth-card">
+
+    <h1>Create Account</h1>
+
+    <input
+      type="text"
+      placeholder="Full Name"
+      [(ngModel)]="name">
+
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email">
+
+    <input
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="password">
+
+    <button
+      class="btn btn-primary"
+      (click)="register()"
+      [disabled]="isLoading">
+
+      {{ isLoading ? 'Creating...' : 'Register' }}
+
+    </button>
+
+    <p>
+      Already have an account?
+      <a routerLink="/login">Login</a>
+    </p>
+
+  </div>
+
+</div>

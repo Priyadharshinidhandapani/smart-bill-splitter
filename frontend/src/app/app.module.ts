@@ -9,14 +9,19 @@ import { HomeComponent } from './components/home/home.component';
 import { BillHistoryComponent } from './components/bill-history/bill-history.component';
 import { BillDetailComponent } from './components/bill-detail/bill-detail.component';
 import { ContactManagementComponent } from './components/contact-management/contact-management.component';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     BillHistoryComponent,
     BillDetailComponent,
-    ContactManagementComponent
+    ContactManagementComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +29,11 @@ import { ContactManagementComponent } from './components/contact-management/cont
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [{
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

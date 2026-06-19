@@ -5,11 +5,31 @@
         <span class="brand-mark">S</span>
         <span class="brand-name">Smart Bill Splitter</span>
       </a>
-      <nav class="nav-links">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">New Split</a>
-        <a routerLink="/history" routerLinkActive="active">History</a>
-        <a routerLink="/contacts" routerLinkActive="active">Contacts</a>
-      </nav>
+      <nav class="nav-links" *ngIf="isLoggedIn()">
+
+  <a routerLink="/"
+     routerLinkActive="active"
+     [routerLinkActiveOptions]="{ exact: true }">
+    New Split
+  </a>
+
+  <a routerLink="/history"
+     routerLinkActive="active">
+    History
+  </a>
+
+  <a routerLink="/contacts"
+     routerLinkActive="active">
+    Contacts
+  </a>
+
+  <button
+    class="logout-btn"
+    (click)="logout()">
+    Logout
+  </button>
+
+</nav>
     </div>
   </header>
 

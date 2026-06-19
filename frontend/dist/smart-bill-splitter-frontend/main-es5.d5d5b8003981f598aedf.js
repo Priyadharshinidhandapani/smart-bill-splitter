@@ -1249,6 +1249,26 @@
     },
 
     /***/
+    "E8lZ":
+    /*!***************************************************************************************************!*\
+      !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/components/register/register.component.html ***!
+      \***************************************************************************************************/
+
+    /*! exports provided: default */
+
+    /***/
+    function E8lZ(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony default export */
+
+
+      __webpack_exports__["default"] = "<div class=\"page-container\">\n\n  <div class=\"card auth-card\">\n\n    <h1>Create Account</h1>\n\n    <input\n      type=\"text\"\n      placeholder=\"Full Name\"\n      [(ngModel)]=\"name\">\n\n    <input\n      type=\"email\"\n      placeholder=\"Email\"\n      [(ngModel)]=\"email\">\n\n    <input\n      type=\"password\"\n      placeholder=\"Password\"\n      [(ngModel)]=\"password\">\n\n    <button\n      class=\"btn btn-primary\"\n      (click)=\"register()\"\n      [disabled]=\"isLoading\">\n\n      {{ isLoading ? 'Creating...' : 'Register' }}\n\n    </button>\n\n    <p>\n      Already have an account?\n      <a routerLink=\"/login\">Login</a>\n    </p>\n\n  </div>\n\n</div>";
+      /***/
+    },
+
+    /***/
     "GIuP":
     /*!****************************************!*\
       !*** ./src/app/services/api-config.ts ***!
@@ -1279,6 +1299,26 @@
     },
 
     /***/
+    "O5bD":
+    /*!*********************************************************************************************!*\
+      !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/components/login/login.component.html ***!
+      \*********************************************************************************************/
+
+    /*! exports provided: default */
+
+    /***/
+    function O5bD(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony default export */
+
+
+      __webpack_exports__["default"] = "<div class=\"page-container\">\n\n  <div class=\"card auth-card\">\n\n    <h1>Login</h1>\n\n    <input\n      type=\"email\"\n      placeholder=\"Email\"\n      [(ngModel)]=\"email\">\n\n    <input\n      type=\"password\"\n      placeholder=\"Password\"\n      [(ngModel)]=\"password\">\n\n    <button\n      class=\"btn btn-primary\"\n      (click)=\"login()\"\n      [disabled]=\"isLoading\">\n\n      {{ isLoading ? 'Logging in...' : 'Login' }}\n\n    </button>\n\n    <p>\n      Don't have an account?\n      <a routerLink=\"/register\">Register</a>\n    </p>\n\n  </div>\n\n</div>";
+      /***/
+    },
+
+    /***/
     "Q4ac":
     /*!***********************************************************************************************************************!*\
       !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/components/contact-management/contact-management.component.html ***!
@@ -1295,6 +1335,66 @@
 
 
       __webpack_exports__["default"] = "<div class=\"page-container\">\n  <div class=\"header-row\">\n    <div>\n      <h1 class=\"page-title\">Contacts</h1>\n      <p class=\"page-subtitle\">People you split bills with regularly.</p>\n    </div>\n    <button class=\"btn btn-primary btn-sm\" (click)=\"openAddForm()\">+ Add Contact</button>\n  </div>\n\n  <!-- Add / Edit Form -->\n  <div class=\"card form-card\" *ngIf=\"showForm\">\n    <h3 class=\"form-title\">{{ editingId ? 'Edit Contact' : 'New Contact' }}</h3>\n    <div class=\"field\">\n      <label>Name</label>\n      <input\n        type=\"text\"\n        [(ngModel)]=\"formName\"\n        (ngModelChange)=\"onNameInput()\"\n        placeholder=\"Full name\"\n        name=\"formName\"\n        [class.input-invalid]=\"nameError\"\n      />\n      <p class=\"field-error\" *ngIf=\"nameError\">{{ nameError }}</p>\n    </div>\n    <div class=\"field\">\n      <label>Phone Number</label>\n      <input\n        type=\"tel\"\n        [(ngModel)]=\"formPhone\"\n        (ngModelChange)=\"onPhoneInput()\"\n        placeholder=\"Phone number\"\n        name=\"formPhone\"\n        [class.input-invalid]=\"phoneError\"\n      />\n      <p class=\"field-error\" *ngIf=\"phoneError\">{{ phoneError }}</p>\n    </div>\n    <div class=\"form-actions\">\n      <button class=\"btn btn-ghost\" (click)=\"cancelForm()\">Cancel</button>\n      <button class=\"btn btn-primary\" (click)=\"submitForm()\" [disabled]=\"isSaving\">\n        <span class=\"spinner\" *ngIf=\"isSaving\"></span>\n        <span *ngIf=\"isSaving\">Saving…</span>\n        <span *ngIf=\"!isSaving\">Save Contact</span>\n      </button>\n    </div>\n  </div>\n\n  <div class=\"controls-row\">\n    <input\n      type=\"text\"\n      placeholder=\"Search by name or phone\"\n      [(ngModel)]=\"searchTerm\"\n      (ngModelChange)=\"onSearchChange()\"\n      class=\"search-input\"\n      name=\"searchTerm\"\n    />\n  </div>\n\n  <div class=\"loading-row\" *ngIf=\"isLoading\">\n    <span class=\"spinner spinner-dark\"></span> Loading contacts…\n  </div>\n\n  <div class=\"empty-state\" *ngIf=\"!isLoading && contacts.length === 0\">\n    <h3>No Contacts Yet</h3>\n    <p>Add a contact to reuse them across future bill splits.</p>\n  </div>\n\n  <div class=\"card\" *ngIf=\"!isLoading && contacts.length > 0\">\n    <div class=\"table-wrap\">\n      <table class=\"data-table\">\n        <thead>\n          <tr>\n            <th>Name</th>\n            <th>Phone</th>\n            <th>Added</th>\n            <th></th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let c of contacts\">\n            <td data-label=\"Name\">{{ c.name }}</td>\n            <td data-label=\"Phone\">{{ c.phone }}</td>\n            <td data-label=\"Added\">{{ formatDate(c.created_at) }}</td>\n            <td data-label=\"Actions\">\n              <div class=\"row-actions\" *ngIf=\"confirmDeleteId === c.id\">\n                <button class=\"btn btn-ghost btn-sm\" (click)=\"cancelDelete()\">Cancel</button>\n                <button class=\"btn btn-danger btn-sm\" (click)=\"confirmDelete(c.id)\">Confirm</button>\n              </div>\n              <div class=\"row-actions\" *ngIf=\"confirmDeleteId !== c.id\">\n                <button class=\"btn btn-ghost btn-sm\" (click)=\"openEditForm(c)\">Edit</button>\n                <button class=\"btn btn-danger btn-sm\" (click)=\"requestDelete(c.id)\">Delete</button>\n              </div>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>\n</div>";
+      /***/
+    },
+
+    /***/
+    "RDNO":
+    /*!**************************************************!*\
+      !*** ./src/app/interceptors/auth.interceptor.ts ***!
+      \**************************************************/
+
+    /*! exports provided: AuthInterceptor */
+
+    /***/
+    function RDNO(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "AuthInterceptor", function () {
+        return AuthInterceptor;
+      });
+      /* harmony import */
+
+
+      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! tslib */
+      "mrSG");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! @angular/core */
+      "fXoL");
+
+      var AuthInterceptor = /*#__PURE__*/function () {
+        function AuthInterceptor() {
+          _classCallCheck(this, AuthInterceptor);
+        }
+
+        return _createClass(AuthInterceptor, [{
+          key: "intercept",
+          value: function intercept(req, next) {
+            var token = localStorage.getItem('token'); // Don't attach token for login/register requests
+
+            if (!token || req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
+              return next.handle(req);
+            }
+
+            var clonedReq = req.clone({
+              setHeaders: {
+                Authorization: "Bearer ".concat(token)
+              }
+            });
+            return next.handle(clonedReq);
+          }
+        }]);
+      }();
+
+      AuthInterceptor = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])()], AuthInterceptor);
       /***/
     },
 
@@ -1423,6 +1523,265 @@
     },
 
     /***/
+    "W3Zi":
+    /*!*****************************************************!*\
+      !*** ./src/app/components/login/login.component.ts ***!
+      \*****************************************************/
+
+    /*! exports provided: LoginComponent */
+
+    /***/
+    function W3Zi(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "LoginComponent", function () {
+        return LoginComponent;
+      });
+      /* harmony import */
+
+
+      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! tslib */
+      "mrSG");
+      /* harmony import */
+
+
+      var _raw_loader_login_component_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! raw-loader!./login.component.html */
+      "O5bD");
+      /* harmony import */
+
+
+      var _login_component_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! ./login.component.css */
+      "mDuy");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      /*! @angular/core */
+      "fXoL");
+      /* harmony import */
+
+
+      var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! @angular/router */
+      "tyNb");
+      /* harmony import */
+
+
+      var _services_auth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+      /*! ../../services/auth.service */
+      "lGQG");
+      /* harmony import */
+
+
+      var _services_toast_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+      /*! ../../services/toast.service */
+      "2g2N");
+
+      var LoginComponent = /*#__PURE__*/function () {
+        function LoginComponent(authService, router, toast) {
+          _classCallCheck(this, LoginComponent);
+
+          this.authService = authService;
+          this.router = router;
+          this.toast = toast;
+          this.email = '';
+          this.password = '';
+          this.isLoading = false;
+        }
+
+        return _createClass(LoginComponent, [{
+          key: "login",
+          value: function login() {
+            var _this0 = this;
+
+            if (!this.email || !this.password) {
+              this.toast.error('Please fill all fields');
+              return;
+            }
+
+            this.isLoading = true;
+            this.authService.login({
+              email: this.email,
+              password: this.password
+            }).subscribe({
+              next: function next(response) {
+                _this0.isLoading = false; // Save JWT token
+
+                _this0.authService.saveToken(response.token); // Optional: Save user info
+
+
+                localStorage.setItem('user', JSON.stringify(response.user));
+
+                _this0.toast.success('Login successful');
+
+                _this0.router.navigate(['/']);
+              },
+              error: function error(err) {
+                var _a;
+
+                _this0.isLoading = false;
+
+                _this0.toast.error(((_a = err.error) === null || _a === void 0 ? void 0 : _a.error) || 'Login failed');
+              }
+            });
+          }
+        }]);
+      }();
+
+      LoginComponent.ctorParameters = function () {
+        return [{
+          type: _services_auth_service__WEBPACK_IMPORTED_MODULE_5__["AuthService"]
+        }, {
+          type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]
+        }, {
+          type: _services_toast_service__WEBPACK_IMPORTED_MODULE_6__["ToastService"]
+        }];
+      };
+
+      LoginComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
+        selector: 'app-login',
+        template: _raw_loader_login_component_html__WEBPACK_IMPORTED_MODULE_1__["default"],
+        styles: [_login_component_css__WEBPACK_IMPORTED_MODULE_2__["default"]]
+      })], LoginComponent);
+      /***/
+    },
+
+    /***/
+    "XC3f":
+    /*!***********************************************************!*\
+      !*** ./src/app/components/register/register.component.ts ***!
+      \***********************************************************/
+
+    /*! exports provided: RegisterComponent */
+
+    /***/
+    function XC3f(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "RegisterComponent", function () {
+        return RegisterComponent;
+      });
+      /* harmony import */
+
+
+      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! tslib */
+      "mrSG");
+      /* harmony import */
+
+
+      var _raw_loader_register_component_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! raw-loader!./register.component.html */
+      "E8lZ");
+      /* harmony import */
+
+
+      var _register_component_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! ./register.component.css */
+      "woRh");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      /*! @angular/core */
+      "fXoL");
+      /* harmony import */
+
+
+      var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! @angular/router */
+      "tyNb");
+      /* harmony import */
+
+
+      var _services_auth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+      /*! ../../services/auth.service */
+      "lGQG");
+      /* harmony import */
+
+
+      var _services_toast_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+      /*! ../../services/toast.service */
+      "2g2N");
+
+      var RegisterComponent = /*#__PURE__*/function () {
+        function RegisterComponent(authService, router, toast) {
+          _classCallCheck(this, RegisterComponent);
+
+          this.authService = authService;
+          this.router = router;
+          this.toast = toast;
+          this.name = '';
+          this.email = '';
+          this.password = '';
+          this.isLoading = false;
+        }
+
+        return _createClass(RegisterComponent, [{
+          key: "register",
+          value: function register() {
+            var _this1 = this;
+
+            if (!this.name || !this.email || !this.password) {
+              this.toast.error('Please fill all fields');
+              return;
+            }
+
+            this.isLoading = true;
+            this.authService.register({
+              name: this.name,
+              email: this.email,
+              password: this.password
+            }).subscribe({
+              next: function next() {
+                _this1.isLoading = false;
+
+                _this1.toast.success('Registration successful');
+
+                _this1.router.navigate(['/login']);
+              },
+              error: function error(err) {
+                var _a;
+
+                _this1.isLoading = false;
+
+                _this1.toast.error(((_a = err.error) === null || _a === void 0 ? void 0 : _a.error) || 'Registration failed');
+              }
+            });
+          }
+        }]);
+      }();
+
+      RegisterComponent.ctorParameters = function () {
+        return [{
+          type: _services_auth_service__WEBPACK_IMPORTED_MODULE_5__["AuthService"]
+        }, {
+          type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]
+        }, {
+          type: _services_toast_service__WEBPACK_IMPORTED_MODULE_6__["ToastService"]
+        }];
+      };
+
+      RegisterComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
+        selector: 'app-register',
+        template: _raw_loader_register_component_html__WEBPACK_IMPORTED_MODULE_1__["default"],
+        styles: [_register_component_css__WEBPACK_IMPORTED_MODULE_2__["default"]]
+      })], RegisterComponent);
+      /***/
+    },
+
+    /***/
     "ZAI4":
     /*!*******************************!*\
       !*** ./src/app/app.module.ts ***!
@@ -1507,15 +1866,37 @@
       var _components_contact_management_contact_management_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
       /*! ./components/contact-management/contact-management.component */
       "1+D7");
+      /* harmony import */
+
+
+      var _interceptors_auth_interceptor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
+      /*! ./interceptors/auth.interceptor */
+      "RDNO");
+      /* harmony import */
+
+
+      var _components_login_login_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
+      /*! ./components/login/login.component */
+      "W3Zi");
+      /* harmony import */
+
+
+      var _components_register_register_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
+      /*! ./components/register/register.component */
+      "XC3f");
 
       var AppModule = /*#__PURE__*/_createClass(function AppModule() {
         _classCallCheck(this, AppModule);
       });
 
       AppModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-        declarations: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"], _components_home_home_component__WEBPACK_IMPORTED_MODULE_7__["HomeComponent"], _components_bill_history_bill_history_component__WEBPACK_IMPORTED_MODULE_8__["BillHistoryComponent"], _components_bill_detail_bill_detail_component__WEBPACK_IMPORTED_MODULE_9__["BillDetailComponent"], _components_contact_management_contact_management_component__WEBPACK_IMPORTED_MODULE_10__["ContactManagementComponent"]],
+        declarations: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"], _components_home_home_component__WEBPACK_IMPORTED_MODULE_7__["HomeComponent"], _components_bill_history_bill_history_component__WEBPACK_IMPORTED_MODULE_8__["BillHistoryComponent"], _components_bill_detail_bill_detail_component__WEBPACK_IMPORTED_MODULE_9__["BillDetailComponent"], _components_contact_management_contact_management_component__WEBPACK_IMPORTED_MODULE_10__["ContactManagementComponent"], _components_login_login_component__WEBPACK_IMPORTED_MODULE_12__["LoginComponent"], _components_register_register_component__WEBPACK_IMPORTED_MODULE_13__["RegisterComponent"]],
         imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["BrowserModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_5__["AppRoutingModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"]],
-        providers: [],
+        providers: [{
+          provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HTTP_INTERCEPTORS"],
+          useClass: _interceptors_auth_interceptor__WEBPACK_IMPORTED_MODULE_11__["AuthInterceptor"],
+          multi: true
+        }],
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"]]
       })], AppModule);
       /***/
@@ -1716,7 +2097,7 @@
         return _createClass(BillDetailComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this0 = this;
+            var _this10 = this;
 
             var id = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -1740,20 +2121,20 @@
                   });
                 }
 
-                _this0.bill = bill;
-                _this0.isLoading = false;
+                _this10.bill = bill;
+                _this10.isLoading = false;
               },
               error: function error(err) {
                 console.error(err);
-                _this0.notFound = true;
-                _this0.isLoading = false;
+                _this10.notFound = true;
+                _this10.isLoading = false;
               }
             });
           }
         }, {
           key: "deleteBill",
           value: function deleteBill() {
-            var _this1 = this;
+            var _this11 = this;
 
             if (!this.bill) {
               return;
@@ -1761,12 +2142,12 @@
 
             this.billService["delete"](this.bill.id).subscribe({
               next: function next() {
-                _this1.toast.success('Bill deleted');
+                _this11.toast.success('Bill deleted');
 
-                _this1.router.navigate(['/history']);
+                _this11.router.navigate(['/history']);
               },
               error: function error() {
-                _this1.toast.error('Failed to delete bill');
+                _this11.toast.error('Failed to delete bill');
               }
             });
           }
@@ -1887,18 +2268,18 @@
         }, {
           key: "loadBills",
           value: function loadBills() {
-            var _this10 = this;
+            var _this12 = this;
 
             this.isLoading = true;
             this.billService.getAll(this.searchTerm || undefined, this.sortOrder).subscribe({
               next: function next(bills) {
-                _this10.bills = bills;
-                _this10.isLoading = false;
+                _this12.bills = bills;
+                _this12.isLoading = false;
               },
               error: function error() {
-                _this10.isLoading = false;
+                _this12.isLoading = false;
 
-                _this10.toast.error('Could not load bill history. Is the backend running?');
+                _this12.toast.error('Could not load bill history. Is the backend running?');
               }
             });
           }
@@ -1926,19 +2307,19 @@
         }, {
           key: "confirmDelete",
           value: function confirmDelete(id) {
-            var _this11 = this;
+            var _this13 = this;
 
             this.billService["delete"](id).subscribe({
               next: function next() {
-                _this11.bills = _this11.bills.filter(function (b) {
+                _this13.bills = _this13.bills.filter(function (b) {
                   return b.id !== id;
                 });
-                _this11.confirmDeleteId = null;
+                _this13.confirmDeleteId = null;
 
-                _this11.toast.success('Bill deleted');
+                _this13.toast.success('Bill deleted');
               },
               error: function error() {
-                _this11.toast.error('Failed to delete bill');
+                _this13.toast.error('Failed to delete bill');
               }
             });
           }
@@ -1982,6 +2363,123 @@
         template: _raw_loader_bill_history_component_html__WEBPACK_IMPORTED_MODULE_1__["default"],
         styles: [_bill_history_component_css__WEBPACK_IMPORTED_MODULE_2__["default"]]
       })], BillHistoryComponent);
+      /***/
+    },
+
+    /***/
+    "lGQG":
+    /*!******************************************!*\
+      !*** ./src/app/services/auth.service.ts ***!
+      \******************************************/
+
+    /*! exports provided: AuthService */
+
+    /***/
+    function lGQG(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "AuthService", function () {
+        return AuthService;
+      });
+      /* harmony import */
+
+
+      var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! tslib */
+      "mrSG");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! @angular/core */
+      "fXoL");
+      /* harmony import */
+
+
+      var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! @angular/common/http */
+      "tk/3");
+      /* harmony import */
+
+
+      var _api_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      /*! ./api-config */
+      "GIuP");
+
+      var AuthService = /*#__PURE__*/function () {
+        function AuthService(http) {
+          _classCallCheck(this, AuthService);
+
+          this.http = http;
+          this.baseUrl = "".concat(_api_config__WEBPACK_IMPORTED_MODULE_3__["API_BASE_URL"], "/auth");
+        }
+
+        return _createClass(AuthService, [{
+          key: "register",
+          value: function register(user) {
+            return this.http.post("".concat(this.baseUrl, "/register"), user);
+          }
+        }, {
+          key: "login",
+          value: function login(credentials) {
+            return this.http.post("".concat(this.baseUrl, "/login"), credentials);
+          }
+        }, {
+          key: "saveToken",
+          value: function saveToken(token) {
+            localStorage.setItem('token', token);
+          }
+        }, {
+          key: "getToken",
+          value: function getToken() {
+            return localStorage.getItem('token');
+          }
+        }, {
+          key: "logout",
+          value: function logout() {
+            localStorage.removeItem('token');
+          }
+        }, {
+          key: "isLoggedIn",
+          value: function isLoggedIn() {
+            return !!this.getToken();
+          }
+        }]);
+      }();
+
+      AuthService.ctorParameters = function () {
+        return [{
+          type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]
+        }];
+      };
+
+      AuthService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+      })], AuthService);
+      /***/
+    },
+
+    /***/
+    "mDuy":
+    /*!******************************************************!*\
+      !*** ./src/app/components/login/login.component.css ***!
+      \******************************************************/
+
+    /*! exports provided: default */
+
+    /***/
+    function mDuy(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony default export */
+
+
+      __webpack_exports__["default"] = ".page-container{\r\n  display:flex;\r\n  justify-content:center;\r\n  align-items:center;\r\n  min-height:80vh;\r\n}\r\n\r\n.auth-card{\r\n  width:400px;\r\n  padding:30px;\r\n  display:flex;\r\n  flex-direction:column;\r\n  gap:15px;\r\n}\r\n\r\ninput{\r\n  padding:12px;\r\n  border:1px solid #444;\r\n  border-radius:8px;\r\n  background:transparent;\r\n  color:white;\r\n}\r\n\r\nbutton{\r\n  padding:12px;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImxvZ2luLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxZQUFZO0VBQ1osc0JBQXNCO0VBQ3RCLGtCQUFrQjtFQUNsQixlQUFlO0FBQ2pCOztBQUVBO0VBQ0UsV0FBVztFQUNYLFlBQVk7RUFDWixZQUFZO0VBQ1oscUJBQXFCO0VBQ3JCLFFBQVE7QUFDVjs7QUFFQTtFQUNFLFlBQVk7RUFDWixxQkFBcUI7RUFDckIsaUJBQWlCO0VBQ2pCLHNCQUFzQjtFQUN0QixXQUFXO0FBQ2I7O0FBRUE7RUFDRSxZQUFZO0FBQ2QiLCJmaWxlIjoibG9naW4uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5wYWdlLWNvbnRhaW5lcntcclxuICBkaXNwbGF5OmZsZXg7XHJcbiAganVzdGlmeS1jb250ZW50OmNlbnRlcjtcclxuICBhbGlnbi1pdGVtczpjZW50ZXI7XHJcbiAgbWluLWhlaWdodDo4MHZoO1xyXG59XHJcblxyXG4uYXV0aC1jYXJke1xyXG4gIHdpZHRoOjQwMHB4O1xyXG4gIHBhZGRpbmc6MzBweDtcclxuICBkaXNwbGF5OmZsZXg7XHJcbiAgZmxleC1kaXJlY3Rpb246Y29sdW1uO1xyXG4gIGdhcDoxNXB4O1xyXG59XHJcblxyXG5pbnB1dHtcclxuICBwYWRkaW5nOjEycHg7XHJcbiAgYm9yZGVyOjFweCBzb2xpZCAjNDQ0O1xyXG4gIGJvcmRlci1yYWRpdXM6OHB4O1xyXG4gIGJhY2tncm91bmQ6dHJhbnNwYXJlbnQ7XHJcbiAgY29sb3I6d2hpdGU7XHJcbn1cclxuXHJcbmJ1dHRvbntcclxuICBwYWRkaW5nOjEycHg7XHJcbn0iXX0= */";
       /***/
     },
 
@@ -2106,6 +2604,18 @@
       var _components_contact_management_contact_management_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
       /*! ./components/contact-management/contact-management.component */
       "1+D7");
+      /* harmony import */
+
+
+      var _components_login_login_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
+      /*! ./components/login/login.component */
+      "W3Zi");
+      /* harmony import */
+
+
+      var _components_register_register_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(
+      /*! ./components/register/register.component */
+      "XC3f");
 
       var routes = [{
         path: '',
@@ -2120,6 +2630,12 @@
         path: 'contacts',
         component: _components_contact_management_contact_management_component__WEBPACK_IMPORTED_MODULE_6__["ContactManagementComponent"]
       }, {
+        path: 'login',
+        component: _components_login_login_component__WEBPACK_IMPORTED_MODULE_7__["LoginComponent"]
+      }, {
+        path: 'register',
+        component: _components_register_register_component__WEBPACK_IMPORTED_MODULE_8__["RegisterComponent"]
+      }, {
         path: '**',
         redirectTo: ''
       }];
@@ -2132,6 +2648,26 @@
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forRoot(routes)],
         exports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"]]
       })], AppRoutingModule);
+      /***/
+    },
+
+    /***/
+    "woRh":
+    /*!************************************************************!*\
+      !*** ./src/app/components/register/register.component.css ***!
+      \************************************************************/
+
+    /*! exports provided: default */
+
+    /***/
+    function woRh(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony default export */
+
+
+      __webpack_exports__["default"] = ".page-container{\r\n  display:flex;\r\n  justify-content:center;\r\n  align-items:center;\r\n  min-height:80vh;\r\n}\r\n\r\n.auth-card{\r\n  width:400px;\r\n  padding:30px;\r\n  display:flex;\r\n  flex-direction:column;\r\n  gap:15px;\r\n}\r\n\r\ninput{\r\n  padding:12px;\r\n  border:1px solid #444;\r\n  border-radius:8px;\r\n  background:transparent;\r\n  color:white;\r\n}\r\n\r\nbutton{\r\n  padding:12px;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInJlZ2lzdGVyLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxZQUFZO0VBQ1osc0JBQXNCO0VBQ3RCLGtCQUFrQjtFQUNsQixlQUFlO0FBQ2pCOztBQUVBO0VBQ0UsV0FBVztFQUNYLFlBQVk7RUFDWixZQUFZO0VBQ1oscUJBQXFCO0VBQ3JCLFFBQVE7QUFDVjs7QUFFQTtFQUNFLFlBQVk7RUFDWixxQkFBcUI7RUFDckIsaUJBQWlCO0VBQ2pCLHNCQUFzQjtFQUN0QixXQUFXO0FBQ2I7O0FBRUE7RUFDRSxZQUFZO0FBQ2QiLCJmaWxlIjoicmVnaXN0ZXIuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5wYWdlLWNvbnRhaW5lcntcclxuICBkaXNwbGF5OmZsZXg7XHJcbiAganVzdGlmeS1jb250ZW50OmNlbnRlcjtcclxuICBhbGlnbi1pdGVtczpjZW50ZXI7XHJcbiAgbWluLWhlaWdodDo4MHZoO1xyXG59XHJcblxyXG4uYXV0aC1jYXJke1xyXG4gIHdpZHRoOjQwMHB4O1xyXG4gIHBhZGRpbmc6MzBweDtcclxuICBkaXNwbGF5OmZsZXg7XHJcbiAgZmxleC1kaXJlY3Rpb246Y29sdW1uO1xyXG4gIGdhcDoxNXB4O1xyXG59XHJcblxyXG5pbnB1dHtcclxuICBwYWRkaW5nOjEycHg7XHJcbiAgYm9yZGVyOjFweCBzb2xpZCAjNDQ0O1xyXG4gIGJvcmRlci1yYWRpdXM6OHB4O1xyXG4gIGJhY2tncm91bmQ6dHJhbnNwYXJlbnQ7XHJcbiAgY29sb3I6d2hpdGU7XHJcbn1cclxuXHJcbmJ1dHRvbntcclxuICBwYWRkaW5nOjEycHg7XHJcbn0iXX0= */";
       /***/
     },
 
@@ -2214,4 +2750,4 @@
     }
   }, [[0, "runtime", "vendor"]]]);
 })();
-//# sourceMappingURL=main-es5.4f356c1b32b5e992457b.js.map
+//# sourceMappingURL=main-es5.d5d5b8003981f598aedf.js.map
