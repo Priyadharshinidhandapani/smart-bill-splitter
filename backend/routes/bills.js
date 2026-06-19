@@ -20,13 +20,22 @@ router.get('/', async (req, res) => {
         `
         SELECT DISTINCT b.*
         FROM bills b
-        LEFT JOIN bill_participants p ON p.bill_id = b.id
-        WHERE p.participant_name LIKE ?
-           OR b.split_method LIKE ?
-           OR CAST(b.bill_amount AS CHAR) LIKE ?
+        LEFT JOIN bill_participants p
+          ON p.bill_id = b.id
+        WHERE b.user_id = ?
+          AND (
+                p.participant_name LIKE ?
+                OR b.split_method LIKE ?
+                OR CAST(b.bill_amount AS CHAR) LIKE ?
+              )
         ORDER BY b.created_at ${sort === 'asc' ? 'ASC' : 'DESC'}
         `,
-        [`%${q}%`, `%${q}%`, `%${q}%`]
+        [
+          req.user.id,
+          `%${q}%`,
+          `%${q}%`,
+          `%${q}%`
+        ]
       );
 
       bills = rows;
@@ -35,8 +44,10 @@ router.get('/', async (req, res) => {
         `
         SELECT *
         FROM bills
+        WHERE user_id = ?
         ORDER BY created_at ${sort === 'asc' ? 'ASC' : 'DESC'}
-        `
+        `,
+        [req.user.id]
       );
 
       bills = rows;
@@ -57,6 +68,7 @@ router.get('/', async (req, res) => {
     }
 
     res.json(billsWithParticipants);
+
   } catch (err) {
     res.status(500).json({
       error: 'Failed to fetch bills',
@@ -72,9 +84,10 @@ router.get('/', async (req, res) => {
 */
 router.get('/:id', async (req, res) => {
   try {
+
     const [billRows] = await pool.query(
-      'SELECT * FROM bills WHERE id = ?',
-      [req.params.id]
+      'SELECT * FROM bills WHERE id = ? AND user_id = ?',
+      [req.params.id, req.user.id]
     );
 
     if (billRows.length === 0) {
@@ -94,6 +107,7 @@ router.get('/:id', async (req, res) => {
       ...bill,
       participants
     });
+
   } catch (err) {
     res.status(500).json({
       error: 'Failed to fetch bill',
@@ -108,9 +122,11 @@ router.get('/:id', async (req, res) => {
 |--------------------------------------------------------------------------
 */
 router.post('/', async (req, res) => {
+
   const connection = await pool.getConnection();
 
   try {
+
     const { bill_amount, split_method, participants } = req.body;
 
     const amount = parseFloat(bill_amount);
@@ -134,6 +150,7 @@ router.post('/', async (req, res) => {
     }
 
     for (const p of participants) {
+
       if (!p.participant_name || !p.participant_name.trim()) {
         return res.status(400).json({
           error: 'Each participant must have a name'
@@ -167,6 +184,7 @@ router.post('/', async (req, res) => {
     }
 
     if (split_method === 'shares') {
+
       const totalShares = participants.reduce(
         (sum, p) => sum + Number(p.shares),
         0
@@ -180,6 +198,7 @@ router.post('/', async (req, res) => {
     }
 
     if (split_method === 'percentage') {
+
       const totalPercentage = participants.reduce(
         (sum, p) => sum + Number(p.percentage),
         0
@@ -195,13 +214,16 @@ router.post('/', async (req, res) => {
     let calculatedParticipants;
 
     if (split_method === 'contacts') {
+
       const share = amount / participants.length;
 
       calculatedParticipants = participants.map((p) => ({
         ...p,
         amount: Math.round(share * 100) / 100
       }));
+
     } else if (split_method === 'shares') {
+
       const totalShares = participants.reduce(
         (sum, p) => sum + Number(p.shares),
         0
@@ -214,7 +236,9 @@ router.post('/', async (req, res) => {
             ((Number(p.shares) / totalShares) * amount) * 100
           ) / 100
       }));
+
     } else {
+
       calculatedParticipants = participants.map((p) => ({
         ...p,
         amount:
@@ -229,15 +253,20 @@ router.post('/', async (req, res) => {
     const [billResult] = await connection.query(
       `
       INSERT INTO bills
-      (bill_amount, split_method)
-      VALUES (?, ?)
+      (bill_amount, split_method, user_id)
+      VALUES (?, ?, ?)
       `,
-      [amount, split_method]
+      [
+        amount,
+        split_method,
+        req.user.id
+      ]
     );
 
     const billId = billResult.insertId;
 
     for (const p of calculatedParticipants) {
+
       await connection.query(
         `
         INSERT INTO bill_participants
@@ -265,8 +294,8 @@ router.post('/', async (req, res) => {
     await connection.commit();
 
     const [savedBillRows] = await pool.query(
-      'SELECT * FROM bills WHERE id = ?',
-      [billId]
+      'SELECT * FROM bills WHERE id = ? AND user_id = ?',
+      [billId, req.user.id]
     );
 
     const [savedParticipants] = await pool.query(
@@ -278,13 +307,16 @@ router.post('/', async (req, res) => {
       ...savedBillRows[0],
       participants: savedParticipants
     });
+
   } catch (err) {
+
     await connection.rollback();
 
     res.status(500).json({
       error: 'Failed to create bill',
       details: err.message
     });
+
   } finally {
     connection.release();
   }
@@ -297,9 +329,10 @@ router.post('/', async (req, res) => {
 */
 router.delete('/:id', async (req, res) => {
   try {
+
     const [billRows] = await pool.query(
-      'SELECT * FROM bills WHERE id = ?',
-      [req.params.id]
+      'SELECT * FROM bills WHERE id = ? AND user_id = ?',
+      [req.params.id, req.user.id]
     );
 
     if (billRows.length === 0) {
@@ -309,14 +342,16 @@ router.delete('/:id', async (req, res) => {
     }
 
     await pool.query(
-      'DELETE FROM bills WHERE id = ?',
-      [req.params.id]
+      'DELETE FROM bills WHERE id = ? AND user_id = ?',
+      [req.params.id, req.user.id]
     );
 
     res.json({
       message: 'Bill deleted successfully'
     });
+
   } catch (err) {
+
     res.status(500).json({
       error: 'Failed to delete bill',
       details: err.message

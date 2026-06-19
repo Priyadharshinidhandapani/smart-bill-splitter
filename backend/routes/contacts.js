@@ -14,20 +14,23 @@ router.get('/', async (req, res) => {
 
     if (q) {
       const [result] = await db.execute(
-        `SELECT * 
-         FROM contacts
-         WHERE name LIKE ? OR phone LIKE ?
-         ORDER BY created_at DESC`,
-        [`%${q}%`, `%${q}%`]
-      );
+  `SELECT *
+   FROM contacts
+   WHERE user_id = ?
+   AND (name LIKE ? OR phone LIKE ?)
+   ORDER BY created_at DESC`,
+  [req.user.id, `%${q}%`, `%${q}%`]
+);
 
       rows = result;
     } else {
       const [result] = await db.execute(
-        `SELECT *
-         FROM contacts
-         ORDER BY created_at DESC`
-      );
+  `SELECT *
+   FROM contacts
+   WHERE user_id = ?
+   ORDER BY created_at DESC`,
+  [req.user.id]
+);
 
       rows = result;
     }
@@ -48,8 +51,8 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const [rows] = await db.execute(
-      'SELECT * FROM contacts WHERE id = ?',
-      [req.params.id]
+      'SELECT * FROM contacts WHERE id = ? AND user_id = ?',
+[req.params.id, req.user.id]
     );
 
     if (rows.length === 0) {
@@ -116,8 +119,8 @@ router.post('/', async (req, res) => {
     }
 
     const [insertResult] = await db.execute(
-      'INSERT INTO contacts (name, phone) VALUES (?, ?)',
-      [trimmedName, trimmedPhone]
+      'INSERT INTO contacts (name,phone,user_id) VALUES (?, ?, ?)',
+      [trimmedName,trimmedPhone,req.user.id]
     );
 
     const [newContact] = await db.execute(
@@ -149,9 +152,9 @@ router.put('/:id', async (req, res) => {
     const isPhoneEmpty = !trimmedPhone;
 
     const [contactRows] = await db.execute(
-      'SELECT * FROM contacts WHERE id = ?',
-      [id]
-    );
+  'SELECT * FROM contacts WHERE id = ? AND user_id = ?',
+  [id, req.user.id]
+);
 
     if (contactRows.length === 0) {
       return res.status(404).json({
@@ -205,9 +208,9 @@ router.put('/:id', async (req, res) => {
     );
 
     const [updated] = await db.execute(
-      'SELECT * FROM contacts WHERE id = ?',
-      [id]
-    );
+  'SELECT * FROM contacts WHERE id = ? AND user_id = ?',
+  [id, req.user.id]
+);
 
     res.json(updated[0]);
 
@@ -225,9 +228,9 @@ router.delete('/:id', async (req, res) => {
   try {
 
     const [contact] = await db.execute(
-      'SELECT * FROM contacts WHERE id = ?',
-      [req.params.id]
-    );
+  'SELECT * FROM contacts WHERE id = ? AND user_id = ?',
+  [req.params.id, req.user.id]
+);
 
     if (contact.length === 0) {
       return res.status(404).json({
@@ -236,9 +239,9 @@ router.delete('/:id', async (req, res) => {
     }
 
     await db.execute(
-      'DELETE FROM contacts WHERE id = ?',
-      [req.params.id]
-    );
+  'DELETE FROM contacts WHERE id = ? AND user_id = ?',
+  [req.params.id, req.user.id]
+);
 
     res.json({
       message: 'Contact deleted successfully'

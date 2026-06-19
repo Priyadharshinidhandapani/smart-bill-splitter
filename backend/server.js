@@ -7,7 +7,8 @@ const pool = require('./db/database');
 
 const contactsRouter = require('./routes/contacts');
 const billsRouter = require('./routes/bills');
-
+const authRouter = require('./routes/auth');
+const authMiddleware = require('./middleware/auth');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -25,8 +26,9 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use('/contacts', contactsRouter);
-app.use('/bills', billsRouter);
+app.use('/auth', authRouter);
+app.use('/contacts', authMiddleware, contactsRouter);
+app.use('/bills', authMiddleware, billsRouter);
 
 app.use((req, res) => {
   res.status(404).json({
